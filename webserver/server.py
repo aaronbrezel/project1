@@ -56,7 +56,7 @@ engine.execute("""CREATE TABLE IF NOT EXISTS test (
   id serial,
   name text
 );""")
-engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
+engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace'), ('Boaty McBoatface');""")
 
 
 
@@ -127,6 +127,11 @@ def index():
     names.append(result['name'])  # can also be accessed using result[0]
   cursor.close()
 
+  cursor = g.conn.execute("select U.username as username, count(*) as count from Users U, People PPL Where U.uid = PPL.uid Group By U.username")  
+  test = []
+  for result in cursor:
+    test.append(result['username'])
+  cursor.close
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
   # pass data to a template and dynamically generate HTML based on the data
@@ -153,7 +158,7 @@ def index():
   #     <div>{{n}}</div>
   #     {% endfor %}
   #
-  context = dict(data = names)
+  context = dict(data = names, test = test)
 
 
   #
