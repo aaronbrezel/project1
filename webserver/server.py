@@ -41,7 +41,7 @@ DB_PASSWORD = "g7cu7643"
 
 DB_SERVER = "w4111.cisxo09blonu.us-east-1.rds.amazonaws.com"
 
-DATABASEURI = "postgresql://"+cy2472+":"+g7cu7643+"@"+"w4111.cisxo09blonu.us-east-1.rds.amazonaws.com"+"/w4111"
+DATABASEURI = "postgresql://"+DB_USER+":"+DB_PASSWORD+"@"+"w4111.cisxo09blonu.us-east-1.rds.amazonaws.com"+"/w4111"
 
 
 #
