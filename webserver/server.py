@@ -180,6 +180,13 @@ def another():
   return render_template("anotherfile.html")
 
 
+@app.route('/user')
+def user():
+  return render_template("userPage.html")
+
+#@app.route('/user/<username>')
+#def 
+
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
 def add():
@@ -190,7 +197,8 @@ def add():
   return redirect('/')
 
 
-@app.route('/login')
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     abort(401)
     this_is_never_executed()
