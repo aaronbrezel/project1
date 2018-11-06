@@ -141,38 +141,29 @@ def user():
   if request.method == "POST":
     username = request.form['user']
 
-    cursor = g.conn.execute("SELECT name from users where username = '%s'" % username)
+    #Query to show the user's name
+    qName = "SELECT name from users where username = %s;"
+    cursor = g.conn.execute(qName, (username,))
     welcomeName = []
     for result in cursor:
       welcomeName.append(result['name'])
     cursor.close()
-    #cursor = g.conn.execute("SELECT")
-
-    q = "SELECT T.aname as name from tracking_accounts T, users U where U.uid = T.uid and U.username = %s;"
-    cursor = g.conn.execute(q, (username,))
+   
+    #Query to show the user's tracking account
+    qTrack = "SELECT T.aname as name from tracking_accounts T, users U where U.uid = T.uid and U.username = %s;"
+    cursor = g.conn.execute(qTrack, (username,))
     trackAcc = []
     for result in cursor:
         trackAcc.append(result['name'])
     cursor.close()
-    #
-    # example of a database query
-    #
-    cursor = g.conn.execute("SELECT name FROM test")
-    names = []
-    for result in cursor:
-      names.append(result['name'])  # can also be accessed using result[0]
-    cursor.close()
 
-    
-    
-    #s = select([users])
-    #result = conn.execute(s) 
-    #temp = []
-    #for row in result:
-    #  temp.append(n)
-    
-    
-    
+    #Query to show the user's payment options
+    qPay = "SELECT pdo.oname as name from payment_deposit_options pdo, users U where U.uid = pdo.uid and U.username = %s;"
+    cursor = g.conn.execute(qPay, (username,))
+    payOpt = []
+    for result in cursor:
+      payOpt.append(result['name'])
+    cursor.close()
     #
     # Flask uses Jinja templates, which is an extension to HTML where you can
     # pass data to a template and dynamically generate HTML based on the data
@@ -199,7 +190,7 @@ def user():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(data = names, welcomeName = welcomeName, trackAcc = trackAcc)
+    context = dict(welcomeName = welcomeName, trackAcc = trackAcc, payOpt = payOpt)
 
 
 
@@ -227,10 +218,15 @@ def add():
 #def test():
 #  return render_template("login.html")
 
-
+#Login page
 @app.route('/login', methods=['GET','POST'])
 def login():
   return render_template("login.html")
+
+#404 page
+@app.errorhandler(404)
+def the_bad_place(error):
+  return render_template('404.html')
 
 if __name__ == "__main__":
   import click
