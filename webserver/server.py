@@ -137,50 +137,69 @@ def user():
 
   # DEBUG: this is debugging code to see what request looks like
   print (request.args)
+  
+  if request.method == "POST":
+    username = request.form['user']
 
-  user = request.form['login']
+    cursor = g.conn.execute("SELECT name from users where username = '%s'" % username)
+    welcomeName = []
+    for result in cursor:
+      welcomeName.append(result['name'])
+    cursor.close()
+    #cursor = g.conn.execute("SELECT")
 
-  #
-  # example of a database query
-  #
-  cursor = g.conn.execute("SELECT name FROM test")
-  names = []
-  for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
-  cursor.close()
+    q = "SELECT T.aname as name from tracking_accounts T, users U where U.uid = T.uid and U.username = %s;"
+    cursor = g.conn.execute(q, (username,))
+    trackAcc = []
+    for result in cursor:
+        trackAcc.append(result['name'])
+    cursor.close()
+    #
+    # example of a database query
+    #
+    cursor = g.conn.execute("SELECT name FROM test")
+    names = []
+    for result in cursor:
+      names.append(result['name'])  # can also be accessed using result[0]
+    cursor.close()
 
-  cursor = g.conn.execute("select U.username as username, count(*) as count from Users U, People PPL Where U.uid = PPL.uid Group By U.username")  
-  test = []
-  for result in cursor:
-    test.append(result['username'])
-  cursor.close
-  #
-  # Flask uses Jinja templates, which is an extension to HTML where you can
-  # pass data to a template and dynamically generate HTML based on the data
-  # (you can think of it as simple PHP)
-  # documentation: https://realpython.com/blog/python/primer-on-jinja-templating/
-  #
-  # You can see an example template in templates/index.html
-  #
-  # context are the variables that are passed to the template.
-  # for example, "data" key in the context variable defined below will be
-  # accessible as a variable in index.html:
-  #
-  #     # will print: [u'grace hopper', u'alan turing', u'ada lovelace']
-  #     <div>{{data}}</div>
-  #
-  #     # creates a <div> tag for each element in data
-  #     # will print:
-  #     #
-  #     #   <div>grace hopper</div>
-  #     #   <div>alan turing</div>
-  #     #   <div>ada lovelace</div>
-  #     #
-  #     {% for n in data %}
-  #     <div>{{n}}</div>
-  #     {% endfor %}
-  #
-  context = dict(data = names, test = test, username = user)
+    
+    
+    #s = select([users])
+    #result = conn.execute(s) 
+    #temp = []
+    #for row in result:
+    #  temp.append(n)
+    
+    
+    
+    #
+    # Flask uses Jinja templates, which is an extension to HTML where you can
+    # pass data to a template and dynamically generate HTML based on the data
+    # (you can think of it as simple PHP)
+    # documentation: https://realpython.com/blog/python/primer-on-jinja-templating/
+    #
+    # You can see an example template in templates/index.html
+    #
+    # context are the variables that are passed to the template.
+    # for example, "data" key in the context variable defined below will be
+    # accessible as a variable in index.html:
+    #
+    #     # will print: [u'grace hopper', u'alan turing', u'ada lovelace']
+    #     <div>{{data}}</div>
+    #
+    #     # creates a <div> tag for each element in data
+    #     # will print:
+    #     #
+    #     #   <div>grace hopper</div>
+    #     #   <div>alan turing</div>
+    #     #   <div>ada lovelace</div>
+    #     #
+    #     {% for n in data %}
+    #     <div>{{n}}</div>
+    #     {% endfor %}
+    #
+    context = dict(data = names, welcomeName = welcomeName, trackAcc = trackAcc)
 
 
 
@@ -188,7 +207,8 @@ def user():
 
 
 
-  return render_template("userPage.html", **context)
+    return render_template("userPage.html", **context)
+  return redirect('/')
 
 #@app.route('/user/<username>')
 #def 

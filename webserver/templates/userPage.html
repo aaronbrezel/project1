@@ -2,7 +2,7 @@
 {% extends "index.html" %}
 
 {% block content %}
-<h1>Welcome, {{username}}</h1>
+<h1>Welcome, {% for n in welcomeName %} {{n}} {% endfor %}</h1>
 <br>
 <br>
 <br>
@@ -11,6 +11,13 @@
 
  <div>
     {% for n in data %}
+    <div>{{n}}</div>
+    {% endfor %}
+  </div>
+  
+  <h1>Tracking Accounts</h1>
+  <div>
+    {% for n in trackAcc %}
     <div>{{n}}</div>
     {% endfor %}
   </div>
