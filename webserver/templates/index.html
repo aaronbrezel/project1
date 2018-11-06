@@ -1,31 +1,20 @@
 <html>
-  <style>
-    body{ 
-      font-size: 15pt;
-      font-family: arial;
-    }
-  </style>
+  <head>
+    <style>
+      body{ 
+        font-size: 15pt;
+        font-family: arial;
+      }
+    </style>
+    <!--      <link rel="stylesheet" href="">   PLACE FOR A MORE SIGNIFICANT STYLESHEET    -->
+  </head>
+  
+  
 
   <body>
-    <h1>Welcome, {{user}}</h1>
-    
-    <h1>Some famous Computer Scientists</h1>
-    <div>{{data}}</div>
-
-    <div>
-      {% for n in data %}
-      <div>{{n}}</div>
-      {% endfor %}
-      </div>
-
-<p><a href="/another">Go to the other page</a></p>
-
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
-<div>{{test}}</div>
-  
+    <h1>Welcome, What you see on top is the index, this should be the same for everypage past the login gate</h1>
     <p><a href="/another">Go to the other page</a></p>
+    <hr>
     <div>
         {% block content %}
         {% endblock %}

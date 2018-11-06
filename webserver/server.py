@@ -102,7 +102,29 @@ def teardown_request(exception):
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
 @app.route('/')
-def index():
+def redir():
+  
+  #
+  # render_template looks in the templates/ folder for files.
+  # for example, the below file reads template/index.html
+  #
+  return redirect("/login")
+
+#
+# This is an example of a different path.  You can see it at
+#
+#     localhost:8111/another
+#
+# notice that the functio name is another() rather than index()
+# the functions for each app.route needs to have different names
+#
+@app.route('/another')
+def another():
+  return render_template("anotherfile.html")
+
+
+@app.route('/user', methods =['GET','POST'])
+def user():
   """
   request is a special object that Flask provides to access web request information:
 
@@ -116,7 +138,7 @@ def index():
   # DEBUG: this is debugging code to see what request looks like
   print (request.args)
 
-
+  user = request.form['login']
 
   #
   # example of a database query
@@ -158,31 +180,15 @@ def index():
   #     <div>{{n}}</div>
   #     {% endfor %}
   #
-  context = dict(data = names, test = test)
+  context = dict(data = names, test = test, username = user)
 
 
-  #
-  # render_template looks in the templates/ folder for files.
-  # for example, the below file reads template/index.html
-  #
-  return render_template("index.html", **context)
-
-#
-# This is an example of a different path.  You can see it at
-#
-#     localhost:8111/another
-#
-# notice that the functio name is another() rather than index()
-# the functions for each app.route needs to have different names
-#
-@app.route('/another')
-def another():
-  return render_template("anotherfile.html")
 
 
-@app.route('/user')
-def user():
-  return render_template("userPage.html")
+
+
+
+  return render_template("userPage.html", **context)
 
 #@app.route('/user/<username>')
 #def 
@@ -196,13 +202,15 @@ def add():
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
+#TEST A RENDER OF A HTML DOCUMENT
+#@app.route('/test')
+#def test():
+#  return render_template("login.html")
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET','POST'])
 def login():
-    abort(401)
-    this_is_never_executed()
-
+  return render_template("login.html")
 
 if __name__ == "__main__":
   import click
