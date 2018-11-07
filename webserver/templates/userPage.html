@@ -28,9 +28,12 @@
   {% endfor %}
 </div>
 
-{% for n in cursorKeys %} 
-  {{n}}
-{% endfor %}
+ 
+  {{cursorKeys}}
+
+  {% for n in test %}
+    <div>{{n}}</div>
+  {% endfor %}
 <p><a href="/another">Go to the other page</a></p>
 <!---->
 <!--<form method="POST" action="/add">

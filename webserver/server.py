@@ -18,7 +18,7 @@ Read about it online.
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, request, render_template, g, redirect, Response, session
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -148,6 +148,8 @@ def user():
 
 
   if request.method == "POST":
+    #session['username'] = request.form['user']
+    #username = session['username']
     username = request.form['user']
 
     #Query to show the user's name
@@ -176,12 +178,12 @@ def user():
 
     qTest = "SELECT * from payment_deposit_options pdo, users U where U.uid = pdo.uid and U.username = %s;"
     cursor = g.conn.execute(qTest, (username,))
-    #test = []
+    test = []
     cursorKeys = cursor.keys()
-    #d = {}
-    #d['c'] = {}
-    #d['c']
-    #payOpt.append(d)
+    for result in cursor:
+      test.append(result)
+
+      #test.append(d)
     cursor.close()
 
 
@@ -211,7 +213,7 @@ def user():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(welcomeName = welcomeName, trackAcc = trackAcc, payOpt = payOpt, cursorKeys = cursorKeys)
+    context = dict(welcomeName = welcomeName, trackAcc = trackAcc, payOpt = payOpt, cursorKeys = cursorKeys, test = test)
 
 
 
@@ -242,8 +244,6 @@ def add():
 #Login page
 @app.route('/login', methods=['GET','POST'])
 def login():
-  if request.method == 'POST':
-    session['username'] = request.form['user']
   return render_template("login.html")
 
 #404 page
