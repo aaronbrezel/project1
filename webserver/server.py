@@ -122,6 +122,12 @@ def redir():
 def another():
   return render_template("anotherfile.html")
 
+@app.route('/user/<trackAcc>')
+def tracking_accounts(trackAcc):
+  trackAcc = trackAcc
+  context = dict(trackAcc = trackAcc)
+  return render_template("tracking_accounts.html", **context)
+
 
 @app.route('/user', methods =['GET','POST'])
 def user():
@@ -138,6 +144,9 @@ def user():
   # DEBUG: this is debugging code to see what request looks like
   print (request.args)
   
+
+
+
   if request.method == "POST":
     username = request.form['user']
 
@@ -233,6 +242,8 @@ def add():
 #Login page
 @app.route('/login', methods=['GET','POST'])
 def login():
+  if request.method == 'POST':
+    session['username'] = request.form['user']
   return render_template("login.html")
 
 #404 page
