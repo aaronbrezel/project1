@@ -164,6 +164,18 @@ def user():
     for result in cursor:
       payOpt.append(result['name'])
     cursor.close()
+
+    qTest = "SELECT * from payment_deposit_options pdo, users U where U.uid = pdo.uid and U.username = %s;"
+    cursor = g.conn.execute(qTest, (username,))
+    #test = []
+    cursorKeys = cursor.keys()
+    #d = {}
+    #d['c'] = {}
+    #d['c']
+    #payOpt.append(d)
+    cursor.close()
+
+
     #
     # Flask uses Jinja templates, which is an extension to HTML where you can
     # pass data to a template and dynamically generate HTML based on the data
@@ -190,7 +202,7 @@ def user():
     #     <div>{{n}}</div>
     #     {% endfor %}
     #
-    context = dict(welcomeName = welcomeName, trackAcc = trackAcc, payOpt = payOpt)
+    context = dict(welcomeName = welcomeName, trackAcc = trackAcc, payOpt = payOpt, cursorKeys = cursorKeys)
 
 
 
